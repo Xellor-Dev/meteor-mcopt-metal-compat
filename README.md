@@ -1,33 +1,30 @@
-# Meteor + mcopt Metal compatibility patch
+# Meteor + mcopt Metal compatibility
 
-> **Experimental vibe code — use at your own risk.** This project was produced as a quick compatibility patch, and I do not guarantee its correctness, safety, stability, performance, or future compatibility. Back up your Prism instance and worlds before using it.
+> **Experimental vibe code — use at your own risk.** No guarantee of correctness, stability, performance or future compatibility. Back up your Prism instance and worlds.
 
-A test patch for **Meteor Client 26.3-15** with **mcopt Metal 0.3.0-alpha.2** on Minecraft 26.3 Fabric / Apple Silicon.
+A compatibility bridge for **Meteor Client 26.3-15** and **mcopt Metal 0.3.0-alpha.2** on Minecraft 26.3 Fabric / Apple Silicon. It fixes the GUI `MetalDevice -> IGpuDevice` crash while retaining mcopt Metal.
 
-It addresses the GUI crash caused by `mcopt.metal.MetalDevice` not implementing Meteor's internal `IGpuDevice` interface. The patch preserves mcopt's Metal renderer and forwards Meteor's active GUI scissor state to each Metal render pass.
+## Recommended: separate Meteor addon
 
-## Contents
+Use `meteor-mcopt-compat-0.1.0.jar` with the **original** `meteor-client-26.3-15.jar` and mcopt 0.3.0-alpha.2. Do not use it alongside `meteor-client-26.3-15-mcopt-compat.1.jar`.
 
-- `meteor-client-26.3-15-mcopt-compat.1.jar` — experimental replacement for Meteor 26.3-15.
-- `meteor-mcopt-compat.patch` — source patch against Meteor commit `e3a2e77967629d216e127b5ceecf71fb15f9d2e5`.
-- `README-mcopt-meteor-compat.md` — installation and test checklist.
+1. Remove the earlier patched Meteor JAR and restore the original Meteor 26.3-15 JAR.
+2. Put the original Meteor JAR, mcopt and the addon JAR together in the Prism instance's `mods` folder.
+3. Remove `-Dmcopt.metal=false` if present.
+4. Launch, confirm F3 says `Metal 3 (mcopt)`, then test Meteor GUI/text fields.
 
-## Install
+Addon JAR SHA-256: `e687ab5ddeb42278cc6fd199bcacf8bd842b67c70bf9388bb768c80b5245ee4c`.
 
-1. Back up the instance (and your worlds).
-2. Remove the stock `meteor-client-26.3-15.jar` from the instance's `mods` directory — do not keep both Meteor JARs.
-3. Add the compatibility JAR.
-4. Keep mcopt 0.3.0-alpha.2 installed and remove the `-Dmcopt.metal=false` workaround if you used it.
-5. Launch and confirm that F3 shows `Metal 3 (mcopt)`.
+`meteor-mcopt-compat-addon-0.1.0-source.zip` contains the buildable GPL-3.0 addon source.
 
-## Verification status
+## Earlier patched-Meteor build
 
-The JAR was compiled successfully with Java 25 and the source patch was checked against a clean Meteor 26.3-15 source snapshot. It was reported to work in one real Apple-Silicon Prism installation, but that is **not** a broad compatibility guarantee.
+`meteor-client-26.3-15-mcopt-compat.1.jar` and `meteor-mcopt-compat.patch` are retained as the earlier standalone workaround. Prefer the addon above.
 
-SHA-256 for the included JAR:
+## Verification
 
-`858ec7262c7f9e1f2a1e54ac5aef7e94cfd69a199f21e9cb882003d588a9014d`
+Both the patched-Meteor build and the addon compiled successfully with Java 25. The original patched build was reported to work in one Apple-Silicon Prism installation. This is not broad runtime compatibility testing.
 
 ## License
 
-Meteor Client is GPL-3.0; this derivative patch/build is published under GPL-3.0 as well. mcopt itself is Apache-2.0.
+GPL-3.0 for the Meteor-derived compatibility work; mcopt is Apache-2.0.
